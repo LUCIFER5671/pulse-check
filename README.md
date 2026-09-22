@@ -1,3 +1,3 @@
-﻿# pulse-check
+# ARI 510 Lab 1 - Heart Disease Classification
 
-Benchmarking six classifiers (LR, SVM, SGD, RF, GB, XGBoost) on the UCI Heart Disease dataset.
+University of Michigan-Flint, Fall 2026. Graduate (510) track.
