@@ -13,7 +13,7 @@ from pathlib import Path
 
 import pandas as pd
 from sklearn.ensemble import HistGradientBoostingClassifier, RandomForestClassifier
-from sklearn.linear_model import LogisticRegression
+from sklearn.linear_model import LogisticRegression, SGDClassifier
 from sklearn.model_selection import ParameterGrid
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.svm import SVC
@@ -51,6 +51,11 @@ MODELS = [
         "learning_rate": [0.05, 0.1],
         "max_depth": [None, 3, 6],
         "max_iter": [200],
+    }),
+    ("SGD", SGDClassifier(max_iter=5000, tol=1e-3, random_state=42), {
+        "loss": ["hinge", "log_loss"],
+        "alpha": [0.0001, 0.001, 0.01],
+        "class_weight": [None, "balanced"],
     }),
 ]
 
