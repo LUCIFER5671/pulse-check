@@ -72,9 +72,9 @@ def random_baseline(y_train, y_eval, n_sims=10000, seed=0):
     return {name: round(float(v.mean()), 4) for name, v in sims.items()}
 
 
-def results_table(rows):
-    """Collect score dicts (each with a 'model' key) into a table ranked by F2."""
+def results_table(rows, sort_by="f2"):
+    """Collect score dicts (each with a 'model' key) into a table ranked by sort_by."""
     df = pd.DataFrame(rows)
     if "model" in df.columns:
         df = df.set_index("model")
-    return df.sort_values("f2", ascending=False)
+    return df.sort_values(sort_by, ascending=False, kind="stable")
