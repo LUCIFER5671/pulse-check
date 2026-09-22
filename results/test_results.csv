@@ -1,0 +1,4 @@
+model,params,accuracy,precision,recall,f1,f2
+SVC,"{'C': 1, 'class_weight': 'balanced', 'gamma': 'scale', 'kernel': 'rbf'}",0.7772,0.8081,0.7843,0.796,0.789
+majority_baseline,,0.5543,0.5543,1.0,0.7133,0.8615
+random_baseline,n_sims=10000,0.5053,0.554,0.5521,0.5524,0.552
