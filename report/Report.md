@@ -182,7 +182,7 @@ This is the expected direction. In younger patients the absence of disease is th
 
 Error rates are effectively equal for male and female patients (22.2% and 22.5%), giving no evidence of a sex-linked failure mode at this sample size.
 
-Among chest pain categories, the highest error rate is for typical angina at 42.9%, but this rests on only 7 test patients and cannot be distinguished from noise. The non-anginal group is more informative: 44 patients, a 27.3% error rate, and false positives outnumbering false negatives 8 to 4. The model over-predicts disease in patients whose chest pain is not characteristically cardiac, which is the opposite of the conservative behaviour a screening application would want.
+Among chest pain categories, the highest error rate is for typical angina at 42.9%, but this rests on only 7 test patients and cannot be distinguished from noise. The model over-predicts disease in patients whose chest pain is not characteristically cardiac. For a screening application this is the less costly direction of error, since a false positive leads to a further test rather than a missed diagnosis. It does suggest, though, that the model is not reading chest pain type as strongly diagnostic on its own.
 
 ### 5.5 What this suggests
 
