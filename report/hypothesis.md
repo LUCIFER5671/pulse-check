@@ -1,3 +1,5 @@
 # Hypothesis
 
 I hypothesized that Random Forest would achieve the highest F1. The feature space mixes categorical variables (chest pain type, thal, slope) with continuous ones (age, cholesterol, maximum heart rate), and I expected clinically plausible nonlinear interactions: the significance of a given maximum heart rate should depend on the patient's age. Tree ensembles capture such interactions without manual feature engineering, need no feature scaling, and tolerate the heavy missingness in this data (66% for ca, 53% for thal). I expected logistic regression to trail, since it fits only a linear boundary in the encoded space. Given n=920, I expected any margin to be modest; ensembles generally need more data to separate from simpler models.
+
+This hypothesis was formed after reviewing the lecture material and an initial inspection of the data, before any models were run.
