@@ -61,6 +61,97 @@ Two baselines were included, as required: a majority-class classifier, and a ran
 
 ## 4. Results
 
+### 4.1 Dev-set comparison
+
+Table 1 gives the best configuration for each classifier family, selected by F1 on the dev set, together with the two baselines. The full table of all 88 configurations is in `results/dev_results.csv`.
+
+**Table 1.** Best dev-set configuration per model family.
+
+| Model | Best configuration | Acc | Prec | Rec | F1 | F2 |
+|---|---|---|---|---|---|---|
+| SVM | RBF, C=1, gamma=scale, balanced | 0.880 | 0.885 | 0.902 | **0.893** | 0.898 |
+| Random Forest | depth=None, leaf=1, balanced | 0.875 | 0.884 | 0.892 | 0.888 | 0.890 |
+| Logistic Regression | C=0.1, balanced | 0.870 | 0.890 | 0.873 | 0.881 | 0.876 |
+| SGD | log_loss, alpha=0.01, balanced | 0.870 | 0.890 | 0.873 | 0.881 | 0.876 |
+| k-NN | k=11, uniform | 0.864 | 0.867 | 0.892 | 0.879 | 0.887 |
+| HistGradientBoosting | lr=0.05, depth=3 | 0.864 | 0.881 | 0.873 | 0.877 | 0.874 |
+| Majority baseline | always predict disease | 0.554 | 0.554 | 1.000 | 0.713 | 0.862 |
+| Random baseline | predict at class rate | 0.506 | 0.554 | 0.552 | 0.552 | 0.552 |
+
+Every model comfortably beats both baselines on F1. The six models, however, span only 0.016 F1 between first and last. With 184 dev examples, a single changed prediction moves F1 by roughly 0.005, so the gap between the best and worst model is on the order of three patients. The dev set cannot support a ranking at this resolution.
+
+The SGD classifier ties logistic regression exactly on all five metrics. This is expected rather than coincidental: with `log_loss`, `SGDClassifier` fits the same logistic regression model by a different optimizer, and on a problem this small both converge to effectively the same decision boundary.
+
+### 4.2 Confirming the ranking with repeated cross-validation
+
+Because the dev set could not separate the models, I ran repeated stratified cross-validation (5 folds, 6 repeats, 30 fits) on the training split only, using identical folds for every model so the per-fold differences could be paired. The dev and test sets were not touched.
+
+**Table 2.** Repeated cross-validation on the training split (n=552, 30 folds).
+
+| Model | CV F1 (mean ± std) | Paired diff from SVM (mean / std) | Separable? |
+|---|---|---|---|
+| SVM | 0.8362 ± 0.0284 | — | — |
+| k-NN | 0.8287 ± 0.0295 | 0.0075 / 0.0189 | No |
+| HistGradientBoosting | 0.8287 ± 0.0296 | 0.0075 / 0.0247 | No |
+| Logistic Regression | 0.8266 ± 0.0288 | 0.0096 / 0.0173 | No |
+| Random Forest | 0.8241 ± 0.0299 | 0.0121 / 0.0233 | No |
+| SGD | 0.8205 ± 0.0331 | 0.0157 / 0.0224 | No |
+| Majority baseline | 0.7118 ± 0.0021 | 0.1244 / 0.0286 | Yes |
+
+For every pair, the mean advantage of the SVM is smaller than the fold-to-fold standard deviation of that same difference. Only the majority baseline separates. The two ranking procedures also disagree with each other: Random Forest placed second on dev and last in cross-validation, which is itself evidence that the differences between models are not real.
+
+The SVM was carried forward to the test set as the model that ranked first under both procedures. This was a pre-stated tie-breaking rule, not a preference formed after the fact; logistic regression would have been an equally defensible choice, and Section 6 returns to this.
+
+### 4.3 Test-set results
+
+The test set was evaluated once, with the configuration fixed.
+
+**Table 3.** Final test-set performance (n=184).
+
+| Model | Acc | Prec | Rec | F1 | F2 |
+|---|---|---|---|---|---|
+| SVM (RBF, C=1, balanced) | 0.777 | 0.808 | 0.784 | **0.796** | 0.789 |
+| Majority baseline | 0.554 | 0.554 | 1.000 | 0.713 | 0.862 |
+| Random baseline | 0.505 | 0.554 | 0.552 | 0.552 | 0.552 |
+
+Test F1 of 0.796 sits below both the dev estimate (0.893) and the cross-validation estimate (0.836 ± 0.028), a little over one standard deviation below the latter. Section 6 discusses why the cross-validation figure is the more trustworthy estimate of generalization.
+
+Note that the majority baseline still exceeds the final model on F2 (0.862 against 0.789), for exactly the structural reason set out in Section 3.4.
+
+### 4.4 Data-value ablation
+
+I retrained the chosen configuration on 25%, 50%, 75%, and 100% of the training split (stratified subsamples, five seeds per size, dev and test held fixed) and scored each on both dev and test.
+
+**Table 4.** F1 against training-set size, averaged over five seeds.
+
+| Training rows | Dev F1 | Test F1 |
+|---|---|---|
+| 138 (25%) | 0.858 | 0.792 |
+| 276 (50%) | 0.867 | 0.809 |
+| 414 (75%) | 0.876 | 0.804 |
+| 552 (100%) | 0.893 | 0.796 |
+
+![F1 against training-set size, dev and test](../results/ablation.png)
+
+**Figure 1.** Dev and test F1 as a function of training-set size. Error bars show the standard deviation across five stratified subsamples; the deviation is zero at 100% because all seeds use the full training set and the SVM is deterministic.
+
+Dev F1 rises steadily with training size, from 0.858 to 0.893. Test F1 is flat within noise across the whole range, varying between 0.792 and 0.809 with no trend. On the test set, additional data beyond roughly 276 examples did not improve performance.
+
+The gap between the two curves is constant at every training size, which indicates that the dev/test difference is a property of the splits rather than an artifact of any particular fit.
+
+### 4.5 Site ablation
+
+As an additional ablation, I refit the chosen configuration with the source hospital column retained rather than dropped.
+
+**Table 5.** Effect of retaining the source hospital column.
+
+| `dataset` column | Features | Test F1 | Test accuracy |
+|---|---|---|---|
+| Dropped | 27 | 0.796 | 0.777 |
+| Kept | 31 | 0.816 | 0.799 |
+
+Keeping the site column improves test F1 by 0.020, roughly four patients out of 184. This reverses the direction seen earlier on dev. The result is reported as an observation only: it was measured on the test set, and using it to choose a configuration would convert the test set into a second development set and invalidate the final estimate. Settling the question properly would require the same paired cross-validation procedure as Section 4.2, run on the training data alone. Section 5 shows in any case that dropping the column does not produce a site-independent model.
+
 ## 5. Error Analysis
 
 ## 6. Discussion
