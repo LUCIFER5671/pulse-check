@@ -34,3 +34,17 @@ python -m src.final         # test eval, ablations, errors -> results/test_resul
 `src/final.py` is the only file that touches the test set.
 
 ## Layout
+data/ heart_disease_uci.csv
+src/ data.py, evaluate.py, experiments.py, confirm.py, final.py
+results/ generated CSVs and the ablation figure
+report/ report.md and the exported PDF
+ai_logs/ generative AI use documentation
+
+
+## Module notes
+
+- `data.py` - loading, sentinel-zero correction, and the leak-free `ColumnTransformer` pipeline. All preprocessing is fit on the training split only.
+- `evaluate.py` - metric helpers and the two required baselines. The random baseline is computed analytically over 10,000 simulated prediction sets and was validated against scikit-learn on 200 draws.
+- `experiments.py` - dev-set hyperparameter search across six model families.
+- `confirm.py` - repeated stratified cross-validation (5 folds x 6 repeats) with paired per-fold differences.
+- `final.py` - single test-set evaluation, training-size ablation, site ablation, and error analysis.
