@@ -190,4 +190,38 @@ The dominant failure mode is not a weakness of the classifier but a property of 
 
 ## 6. Discussion
 
+### 6.1 What "best" meant
+
+I treated F1 as decisive, with recall as a tiebreaker among configurations whose F1 differences fell within noise. My first instinct was F2, on the clinical argument that a missed diagnosis costs more than a false alarm, but comparing against the baselines showed it could not do the job: F2 scored the majority-class classifier at 0.8615 against 0.8743 for a tuned logistic regression. A metric that nearly ranks a constant classifier alongside a real model is not measuring what I wanted. The cause is structural, since a positive-majority dataset lets the all-positive classifier attain perfect recall by construction. F1 puts the same comparison at 0.7133 against 0.8768.
+
+This survives to the test set: the majority baseline still beats the final model on test F2 (0.862 against 0.789). Had I kept F2, my conclusion would have been that no model beats predicting disease for everyone, which would have been an artifact of the metric.
+
+### 6.2 The hypothesis was not borne out
+
+I predicted Random Forest would achieve the highest F1. It finished last of six in cross-validation (0.8241 against the SVM's 0.8362). More importantly, the framing was wrong: I expected a ranking to exist, and no pair of models is separable. The six span 0.0121 F1 in total, and the two ranking procedures disagree with each other, with Random Forest placing second on dev and last in cross-validation.
+
+I had expected the feature space to reward a model capturing nonlinear interactions. Either those interactions are weak, or 552 examples are too few to identify them. Two observations point the same way: the winning configurations were the regularized ones (logistic regression at C=0.1, the SVM at C=1), and the SGD classifier with log loss reproduced logistic regression's metrics exactly, as expected given it fits the same model by a different optimizer. On this dataset, at this sample size, the choice among these six families matters less than how the data is cleaned.
+
+### 6.3 The value of data
+
+Dev F1 rises steadily with training size, from 0.858 at 138 examples to 0.893 at 552. Test F1 does not: it moves between 0.792 and 0.809 with no trend, and the value at 552 (0.796) is no better than at 138 (0.792). On the test set, additional data beyond roughly 276 examples bought nothing. Combined with Section 6.2, most of the achievable performance here is reached early, and the remaining errors are not the kind more examples would fix. The constant gap between the two curves indicates that the dev/test difference is a property of the splits rather than of any particular fit.
+
+### 6.4 Dev, cross-validation, and test
+
+The three estimates are 0.893 on dev, 0.836 ± 0.028 in cross-validation, and 0.796 on test. The dev figure is optimistic by construction: each configuration was selected as the best of up to 30 candidates on the same 184 examples, so it absorbs whatever noise that split happened to favour. The cross-validation figure averages 30 folds on training data alone, with no configuration selected on those folds, making it the most trustworthy estimate. The test figure sits a little over one standard deviation below it, unremarkable for a single 184-row sample. Had I selected configurations on the test set, I would have reported something near 0.89 and believed it.
+
+### 6.5 Limitations
+
+The separability test in Section 4.2 is a heuristic, not a statistical test: cross-validation folds share training data, so the per-fold differences are not independent and no p-value should be attached.
+
+The site ablation is unresolved. Keeping the source hospital column improves test F1 by 0.020, contradicting the dev result. I did not switch on this, because choosing a configuration from a test-set result converts that set into a second development set. Settling it would require the paired cross-validation of Section 4.2 run on training data alone.
+
+The SVM's selection rests on a tie the data cannot break. It ranked first under both procedures, which was the rule set in advance, but logistic regression would have been equally defensible and is more interpretable. The test result should be read as the performance of one member of a group of indistinguishable models.
+
+### 6.6 What I learned and what was difficult
+
+I expected the classifier comparison to be the substance of the work and the cleaning to be preliminary. It was the reverse: the six classifiers are indistinguishable, while the discovery that 172 cholesterol values were sentinel zeros, and that their absence encodes hospital identity, changed how the whole result should be read. Those zeros were the harder of the two challenges to catch, since they are invisible to `isna()` and appear in the data as ordinary numbers; I found them by inspecting per-site distributions, where Switzerland showed a mean cholesterol of exactly zero.
+
+The second difficulty was accepting that the comparison had no winner. The natural response to six models within 0.016 F1 is to search harder for the real ordering; the correct response was to test whether one existed. Reporting "no separable difference" felt weaker than naming a winner, but it required treating the absence of a difference as a finding rather than a failure to find one.
+
 ## 7. Generative AI Use Statement
