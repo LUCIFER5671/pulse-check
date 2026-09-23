@@ -154,6 +154,40 @@ Keeping the site column improves test F1 by 0.020, roughly four patients out of 
 
 ## 5. Error Analysis
 
+The final model makes 41 errors on the 184 test patients: 22 false negatives (disease missed) and 19 false positives (disease predicted where none is present). The breakdowns below use the original, pre-preprocessing feature values, and are saved in `results/errors.csv`.
+
+### 5.1 Missing cholesterol acts as a proxy for hospital
+
+The clearest pattern concerns the sentinel-zero cholesterol values identified in Section 3.1. Of the 42 test patients whose cholesterol was recorded as 0, the model produces **no false negatives at all** and 7 false positives, an error rate of 16.7%. Patients with a measured cholesterol value have an error rate of 24.1%. The model is therefore more accurate on the group whose data is missing.
+
+This behaviour is not arbitrary. 81% of test patients with missing cholesterol have heart disease, against 48% of the remainder. The model has learned, through the missingness indicator, that an unmeasured cholesterol value predicts disease, and on this data that inference is correct.
+
+It is also not clinical. Cholesterol is missing because of where the patient was seen: all 123 Switzerland records and 49 of the VA Long Beach records carry the sentinel value, and those two hospitals have disease rates of 93.5% and 74.5% respectively. What the model has actually learned is which hospital the patient came from.
+
+This has a direct consequence for the design decision in Section 3.1. Dropping the `dataset` column does not produce a site-independent model, because the same information re-enters through the pattern of missing values. Site information cannot be removed by deleting a single column; it is distributed across the missingness structure of the entire feature set. That the leak *improves* measured performance is precisely what makes it dangerous: a model of this kind would score well here and fail at a new clinic with different testing practices, since the correlation it relies on is a property of the data collection process rather than of the patients.
+
+### 5.2 Errors track each hospital's base rate
+
+The same effect appears directly in the site breakdown of the errors. 12 of the 22 false negatives are Cleveland patients, and 10 of the 19 false positives are VA Long Beach patients. Cleveland has the second-lowest disease prevalence in the dataset (45.7%) and VA Long Beach the second-highest (74.5%).
+
+The model is therefore pulled toward each site's base rate: it under-predicts disease at low-prevalence sites and over-predicts it at high-prevalence sites. Both error types are concentrated where that prior disagrees with the individual patient.
+
+### 5.3 Age
+
+The error rate rises consistently with patient age: 12.5% in the thirties, 19.4% in the forties, 19.7% in the fifties, and 31.9% in the sixties. (The seventies bucket shows 40%, but contains only 5 patients and should not be read as part of the trend.)
+
+This is the expected direction. In younger patients the absence of disease is the strong prior and is easy to predict, whereas in older patients both outcomes are plausible and the decision depends on finer distinctions between the clinical features.
+
+### 5.4 Sex and chest pain type
+
+Error rates are effectively equal for male and female patients (22.2% and 22.5%), giving no evidence of a sex-linked failure mode at this sample size.
+
+Among chest pain categories, the highest error rate is for typical angina at 42.9%, but this rests on only 7 test patients and cannot be distinguished from noise. The non-anginal group is more informative: 44 patients, a 27.3% error rate, and false positives outnumbering false negatives 8 to 4. The model over-predicts disease in patients whose chest pain is not characteristically cardiac, which is the opposite of the conservative behaviour a screening application would want.
+
+### 5.5 What this suggests
+
+The dominant failure mode is not a weakness of the classifier but a property of the dataset. The strongest signal available to any model here is hospital identity, which correlates with the label far more strongly than most clinical variables, and which survives the removal of the column that names it. Improving the score on this data and building a model that generalizes to a new clinical setting are, to a substantial degree, different objectives.
+
 ## 6. Discussion
 
 ## 7. Generative AI Use Statement
