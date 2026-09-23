@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Report.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> or <div class="page"></div> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h1 id="ari-510-lab-1-heart-disease-classification">ARI 510 Lab 1: Heart Disease Classification</h1>
+<p><strong>Roshkrishna K Ranjith</strong>
+University of Michigan–Flint, Fall 2026
+Track: ARI 510 (Graduate)
+Code: https://github.com/LUCIFER5671/pulse-check</p>
+<h2 id="1-introduction">1. Introduction</h2>
+<p>This report compares machine learning classifiers on a heart disease diagnosis task: predicting from clinical measurements whether a patient has heart disease. I followed the ARI 510 (graduate) track, designing the comparison protocol rather than running a fixed set of configurations.</p>
+<p>The data is the UCI heaPrt disease dataset, comprising 920 patient records from four hospitals (Cleveland, Hungary, Switzerland, VA Long Beach) with 15 features mixing continuous clinical measurements with categorical ones. The raw target records severity on a 0 to 4 scale, which I collapsed to a binary presence/absence label; 55.3% of patients have disease. The dataset is not clean, and the cleaning decisions turned out to matter more than the choice of classifier (Section 3.1).</p>
+<p>I compared six classifier families: logistic regression, support vector machines, k-nearest neighbours, random forests, histogram-based gradient boosting, and a stochastic gradient descent classifier. Two baselines were included throughout: a majority-class classifier and a random classifier predicting at the training-set class rate. I report accuracy, precision, recall, F1, and F2, treating F1 as decisive for reasons set out in Section 3.4.</p>
+<h2 id="2-hypothesis">2. Hypothesis</h2>
+<p>I hypothesized that Random Forest would achieve the highest F1. The feature space mixes categorical variables (chest pain type, <code>thal</code>, <code>slope</code>) with continuous ones (age, cholesterol, maximum heart rate), and I expected clinically plausible nonlinear interactions: the significance of a given maximum heart rate should depend on the patient's age. Tree ensembles capture such interactions without manual feature engineering, need no feature scaling, and tolerate the heavy missingness in this data (66% for <code>ca</code>, 53% for <code>thal</code>). I expected logistic regression to trail, since it fits only a linear boundary in the encoded space. Given n=920, I expected any margin to be modest; ensembles generally need more data to separate from simpler models.</p>
+<p>This hypothesis was formed after reviewing the lecture material and an initial inspection of the data, before any models were run.</p>
+<h2 id="3-approach">3. Approach</h2>
+<h3 id="31-cleaning-and-encoding">3.1 Cleaning and encoding</h3>
+<p>The dataset contains 920 patients and 15 features. The raw target <code>num</code> records severity on a 0 to 4 scale; following the binary framing of the task, I collapsed it to disease present (<code>num &gt; 0</code>) versus absent, giving 509 positive and 411 negative cases (55.3% positive).</p>
+<p>Initial inspection revealed that missing values are not confined to the columns pandas reports as null. 172 rows record a serum cholesterol of 0 and one records a resting blood pressure of 0, both physiologically impossible, and both sentinel encodings for &quot;not measured.&quot; Left untreated, these are read as genuine measurements and distort the feature. I converted both to NaN before any imputation, which raised the missing rate for <code>chol</code> from 3.3% to 22.0% (202 of 920 rows).</p>
+<p>The columns <code>fbs</code> and <code>exang</code> load as booleans with missing entries. I mapped these to 1/0 while preserving NaN, so that &quot;not recorded&quot; remains distinct from &quot;false&quot; rather than collapsing into the negative class.</p>
+<p>Missingness in this dataset is substantial and highly structured: <code>ca</code> is 66.4% missing, <code>thal</code> 52.8%, and <code>slope</code> 33.6%. Crucially, these rates vary by source hospital; <code>ca</code> is 2% missing at Cleveland but 99% missing at Hungary and VA Long Beach. Since the hospitals also differ sharply in disease prevalence (36.2% at Hungary against 93.5% at Switzerland), the pattern of missingness carries information about the label. I therefore retained missingness indicators rather than discarding this signal, and return to its consequences in the error analysis (Section 5).</p>
+<p>I dropped the <code>dataset</code> column, which records the source hospital, from the default feature set. It is a confounder rather than a clinical variable: a model can improve its score by inferring which hospital a patient came from instead of assessing the patient. An ablation measuring what this costs is reported in Section 4.</p>
+<h3 id="32-avoiding-leakage">3.2 Avoiding leakage</h3>
+<p>All preprocessing, meaning imputation, scaling, and one-hot encoding, is implemented as a <code>ColumnTransformer</code> inside a scikit-learn <code>Pipeline</code>, so that every transformer is fit on training data only and applied unchanged to dev and test.</p>
+<p>This departs from the provided starter notebook, which calls <code>X.fillna(X.median())</code> and <code>pd.get_dummies(X)</code> on the complete frame before splitting. Doing so computes imputation values from all 920 patients, including those later assigned to dev and test, so information from the held-out sets influences the training data. The effect on a dataset this clean is likely small, but the practice invalidates the held-out sets as estimates of performance on unseen data, which is the entire reason for holding them out.</p>
+<h3 id="33-data-splitting">3.3 Data splitting</h3>
+<p>I used a stratified 60/20/20 split into train (552), dev (184), and test (184), with stratification preserving the 55.3% positive rate in all three sets. Model selection and hyperparameter search were conducted entirely on the dev set. The test set was evaluated once, after the final configurations were fixed; no result from it was used to revise any choice.</p>
+<h3 id="34-choice-of-decisive-metric">3.4 Choice of decisive metric</h3>
+<p>I report accuracy, precision, recall, and F1 throughout, and initially intended F2 as the decisive metric. The reasoning was clinical: in a screening task, a false negative (a patient with disease sent home) carries a higher cost than a false positive (an unnecessary follow-up test), and F2 weights recall above precision accordingly.</p>
+<p>Testing this choice against the baselines showed it to be unworkable. The majority-class baseline, which predicts &quot;disease&quot; for every patient, achieves an F2 of 0.8615 on the dev set, while a tuned logistic regression achieves 0.8743. A gap of 0.013 separates a real model from a classifier that examines no features at all. The cause is structural: this dataset has a positive majority, so the constant positive classifier attains perfect recall by construction, and F2's emphasis on recall rewards precisely that degeneracy.</p>
+<p>I therefore adopted F1 as the decisive metric. On the same comparison, F1 gives 0.7133 for the majority baseline against 0.8768 for logistic regression, a gap of 0.164 that discriminates. The clinical asymmetry is retained as a secondary criterion: among configurations whose F1 differences fall within noise, I prefer the higher recall. All five metrics are reported for every configuration so the trade-off remains visible.</p>
+<p>I note that this decision was made before any test-set evaluation, on the basis of baseline behaviour alone. The fact that the majority baseline still outperforms the final model on F2 at test time is taken up in Section 6; it is a consequence of the metric's structure, not a reason to revisit the choice after the fact.</p>
+<h3 id="35-model-comparison">3.5 Model comparison</h3>
+<p>I compared six classifier families: logistic regression, support vector machines, k-nearest neighbours, random forests, histogram-based gradient boosting, and a stochastic gradient descent classifier. The search covered 88 configurations in total, with grids given in Table 1. Every configuration was trained on the train split and scored on dev.</p>
+<p>Two baselines were included, as required: a majority-class classifier, and a random classifier that predicts at the training-set class rate. The latter was computed analytically over 10,000 simulated prediction sets and validated against scikit-learn's per-draw metrics on 200 draws, matching to four decimal places.</p>
+<h2 id="4-results">4. Results</h2>
+<h3 id="41-dev-set-comparison">4.1 Dev-set comparison</h3>
+<p>Table 1 gives the best configuration for each classifier family, selected by F1 on the dev set, together with the two baselines. The full table of all 88 configurations is in <code>results/dev_results.csv</code>.</p>
+<p><strong>Table 1.</strong> Best dev-set configuration per model family.</p>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>Best configuration</th>
+<th>Acc</th>
+<th>Prec</th>
+<th>Rec</th>
+<th>F1</th>
+<th>F2</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SVM</td>
+<td>RBF, C=1, gamma=scale, balanced</td>
+<td>0.880</td>
+<td>0.885</td>
+<td>0.902</td>
+<td><strong>0.893</strong></td>
+<td>0.898</td>
+</tr>
+<tr>
+<td>Random Forest</td>
+<td>depth=None, leaf=1, balanced</td>
+<td>0.875</td>
+<td>0.884</td>
+<td>0.892</td>
+<td>0.888</td>
+<td>0.890</td>
+</tr>
+<tr>
+<td>Logistic Regression</td>
+<td>C=0.1, balanced</td>
+<td>0.870</td>
+<td>0.890</td>
+<td>0.873</td>
+<td>0.881</td>
+<td>0.876</td>
+</tr>
+<tr>
+<td>SGD</td>
+<td>log_loss, alpha=0.01, balanced</td>
+<td>0.870</td>
+<td>0.890</td>
+<td>0.873</td>
+<td>0.881</td>
+<td>0.876</td>
+</tr>
+<tr>
+<td>k-NN</td>
+<td>k=11, uniform</td>
+<td>0.864</td>
+<td>0.867</td>
+<td>0.892</td>
+<td>0.879</td>
+<td>0.887</td>
+</tr>
+<tr>
+<td>HistGradientBoosting</td>
+<td>lr=0.05, depth=3</td>
+<td>0.864</td>
+<td>0.881</td>
+<td>0.873</td>
+<td>0.877</td>
+<td>0.874</td>
+</tr>
+<tr>
+<td>Majority baseline</td>
+<td>always predict disease</td>
+<td>0.554</td>
+<td>0.554</td>
+<td>1.000</td>
+<td>0.713</td>
+<td>0.862</td>
+</tr>
+<tr>
+<td>Random baseline</td>
+<td>predict at class rate</td>
+<td>0.506</td>
+<td>0.554</td>
+<td>0.552</td>
+<td>0.552</td>
+<td>0.552</td>
+</tr>
+</tbody>
+</table>
+<p>Every model comfortably beats both baselines on F1. The six models, however, span only 0.016 F1 between first and last. With 184 dev examples, a single changed prediction moves F1 by roughly 0.005, so the gap between the best and worst model is on the order of three patients. The dev set cannot support a ranking at this resolution.</p>
+<p>The SGD classifier ties logistic regression exactly on all five metrics. This is expected rather than coincidental: with <code>log_loss</code>, <code>SGDClassifier</code> fits the same logistic regression model by a different optimizer, and on a problem this small both converge to effectively the same decision boundary.</p>
+<h3 id="42-confirming-the-ranking-with-repeated-cross-validation">4.2 Confirming the ranking with repeated cross-validation</h3>
+<p>Because the dev set could not separate the models, I ran repeated stratified cross-validation (5 folds, 6 repeats, 30 fits) on the training split only, using identical folds for every model so the per-fold differences could be paired. The dev and test sets were not touched.</p>
+<p><strong>Table 2.</strong> Repeated cross-validation on the training split (n=552, 30 folds).</p>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>CV F1 (mean ± std)</th>
+<th>Paired diff from SVM (mean / std)</th>
+<th>Separable?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SVM</td>
+<td>0.8362 ± 0.0284</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>k-NN</td>
+<td>0.8287 ± 0.0295</td>
+<td>0.0075 / 0.0189</td>
+<td>No</td>
+</tr>
+<tr>
+<td>HistGradientBoosting</td>
+<td>0.8287 ± 0.0296</td>
+<td>0.0075 / 0.0247</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Logistic Regression</td>
+<td>0.8266 ± 0.0288</td>
+<td>0.0096 / 0.0173</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Random Forest</td>
+<td>0.8241 ± 0.0299</td>
+<td>0.0121 / 0.0233</td>
+<td>No</td>
+</tr>
+<tr>
+<td>SGD</td>
+<td>0.8205 ± 0.0331</td>
+<td>0.0157 / 0.0224</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Majority baseline</td>
+<td>0.7118 ± 0.0021</td>
+<td>0.1244 / 0.0286</td>
+<td>Yes</td>
+</tr>
+</tbody>
+</table>
+<p>For every pair, the mean advantage of the SVM is smaller than the fold-to-fold standard deviation of that same difference. Only the majority baseline separates. The two ranking procedures also disagree with each other: Random Forest placed second on dev and last in cross-validation, which is itself evidence that the differences between models are not real.</p>
+<p>The SVM was carried forward to the test set as the model that ranked first under both procedures. This was a pre-stated tie-breaking rule, not a preference formed after the fact; logistic regression would have been an equally defensible choice, and Section 6 returns to this.</p>
+<h3 id="43-test-set-results">4.3 Test-set results</h3>
+<p>The test set was evaluated once, with the configuration fixed.</p>
+<p><strong>Table 3.</strong> Final test-set performance (n=184).</p>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>Acc</th>
+<th>Prec</th>
+<th>Rec</th>
+<th>F1</th>
+<th>F2</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SVM (RBF, C=1, balanced)</td>
+<td>0.777</td>
+<td>0.808</td>
+<td>0.784</td>
+<td><strong>0.796</strong></td>
+<td>0.789</td>
+</tr>
+<tr>
+<td>Majority baseline</td>
+<td>0.554</td>
+<td>0.554</td>
+<td>1.000</td>
+<td>0.713</td>
+<td>0.862</td>
+</tr>
+<tr>
+<td>Random baseline</td>
+<td>0.505</td>
+<td>0.554</td>
+<td>0.552</td>
+<td>0.552</td>
+<td>0.552</td>
+</tr>
+</tbody>
+</table>
+<p>Test F1 of 0.796 sits below both the dev estimate (0.893) and the cross-validation estimate (0.836 ± 0.028), a little over one standard deviation below the latter. Section 6 discusses why the cross-validation figure is the more trustworthy estimate of generalization.</p>
+<p>Note that the majority baseline still exceeds the final model on F2 (0.862 against 0.789), for exactly the structural reason set out in Section 3.4.</p>
+<h3 id="44-data-value-ablation">4.4 Data-value ablation</h3>
+<p>I retrained the chosen configuration on 25%, 50%, 75%, and 100% of the training split (stratified subsamples, five seeds per size, dev and test held fixed) and scored each on both dev and test.</p>
+<p><strong>Table 4.</strong> F1 against training-set size, averaged over five seeds.</p>
+<table>
+<thead>
+<tr>
+<th>Training rows</th>
+<th>Dev F1</th>
+<th>Test F1</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>138 (25%)</td>
+<td>0.858</td>
+<td>0.792</td>
+</tr>
+<tr>
+<td>276 (50%)</td>
+<td>0.867</td>
+<td>0.809</td>
+</tr>
+<tr>
+<td>414 (75%)</td>
+<td>0.876</td>
+<td>0.804</td>
+</tr>
+<tr>
+<td>552 (100%)</td>
+<td>0.893</td>
+<td>0.796</td>
+</tr>
+</tbody>
+</table>
+<p><img src="../results/ablation.png" alt="F1 against training-set size, dev and test"></p>
+<p><strong>Figure 1.</strong> Dev and test F1 as a function of training-set size. Error bars show the standard deviation across five stratified subsamples; the deviation is zero at 100% because all seeds use the full training set and the SVM is deterministic.</p>
+<p>Dev F1 rises steadily with training size, from 0.858 to 0.893. Test F1 is flat within noise across the whole range, varying between 0.792 and 0.809 with no trend. On the test set, additional data beyond roughly 276 examples did not improve performance.</p>
+<p>The gap between the two curves is constant at every training size, which indicates that the dev/test difference is a property of the splits rather than an artifact of any particular fit.</p>
+<h3 id="45-site-ablation">4.5 Site ablation</h3>
+<p>As an additional ablation, I refit the chosen configuration with the source hospital column retained rather than dropped.</p>
+<p><strong>Table 5.</strong> Effect of retaining the source hospital column.</p>
+<table>
+<thead>
+<tr>
+<th><code>dataset</code> column</th>
+<th>Features</th>
+<th>Test F1</th>
+<th>Test accuracy</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Dropped</td>
+<td>27</td>
+<td>0.796</td>
+<td>0.777</td>
+</tr>
+<tr>
+<td>Kept</td>
+<td>31</td>
+<td>0.816</td>
+<td>0.799</td>
+</tr>
+</tbody>
+</table>
+<p>Keeping the site column improves test F1 by 0.020, roughly four patients out of 184. This reverses the direction seen earlier on dev. The result is reported as an observation only: it was measured on the test set, and using it to choose a configuration would convert the test set into a second development set and invalidate the final estimate. Settling the question properly would require the same paired cross-validation procedure as Section 4.2, run on the training data alone. Section 5 shows in any case that dropping the column does not produce a site-independent model.</p>
+<h2 id="5-error-analysis">5. Error Analysis</h2>
+<p>The final model makes 41 errors on the 184 test patients: 22 false negatives (disease missed) and 19 false positives (disease predicted where none is present). The breakdowns below use the original, pre-preprocessing feature values, and are saved in <code>results/errors.csv</code>.</p>
+<h3 id="51-missing-cholesterol-acts-as-a-proxy-for-hospital">5.1 Missing cholesterol acts as a proxy for hospital</h3>
+<p>The clearest pattern concerns the sentinel-zero cholesterol values identified in Section 3.1. Of the 42 test patients whose cholesterol was recorded as 0, the model produces <strong>no false negatives at all</strong> and 7 false positives, an error rate of 16.7%. Patients with a measured cholesterol value have an error rate of 24.1%. The model is therefore more accurate on the group whose data is missing.</p>
+<p>This behaviour is not arbitrary. 81% of test patients with missing cholesterol have heart disease, against 48% of the remainder. The model has learned, through the missingness indicator, that an unmeasured cholesterol value predicts disease, and on this data that inference is correct.</p>
+<p>It is also not clinical. Cholesterol is missing because of where the patient was seen: all 123 Switzerland records and 49 of the VA Long Beach records carry the sentinel value, and those two hospitals have disease rates of 93.5% and 74.5% respectively. What the model has actually learned is which hospital the patient came from.</p>
+<p>This has a direct consequence for the design decision in Section 3.1. Dropping the <code>dataset</code> column does not produce a site-independent model, because the same information re-enters through the pattern of missing values. Site information cannot be removed by deleting a single column; it is distributed across the missingness structure of the entire feature set. That the leak <em>improves</em> measured performance is precisely what makes it dangerous: a model of this kind would score well here and fail at a new clinic with different testing practices, since the correlation it relies on is a property of the data collection process rather than of the patients.</p>
+<h3 id="52-errors-track-each-hospitals-base-rate">5.2 Errors track each hospital's base rate</h3>
+<p>The same effect appears directly in the site breakdown of the errors. 12 of the 22 false negatives are Cleveland patients, and 10 of the 19 false positives are VA Long Beach patients. Cleveland has the second-lowest disease prevalence in the dataset (45.7%) and VA Long Beach the second-highest (74.5%).</p>
+<p>The model is therefore pulled toward each site's base rate: it under-predicts disease at low-prevalence sites and over-predicts it at high-prevalence sites. Both error types are concentrated where that prior disagrees with the individual patient.</p>
+<h3 id="53-age">5.3 Age</h3>
+<p>The error rate rises consistently with patient age: 12.5% in the thirties, 19.4% in the forties, 19.7% in the fifties, and 31.9% in the sixties. (The seventies bucket shows 40%, but contains only 5 patients and should not be read as part of the trend.)</p>
+<p>This is the expected direction. In younger patients the absence of disease is the strong prior and is easy to predict, whereas in older patients both outcomes are plausible and the decision depends on finer distinctions between the clinical features.</p>
+<h3 id="54-sex-and-chest-pain-type">5.4 Sex and chest pain type</h3>
+<p>Error rates are effectively equal for male and female patients (22.2% and 22.5%), giving no evidence of a sex-linked failure mode at this sample size.</p>
+<p>Among chest pain categories, the highest error rate is for typical angina at 42.9%, but this rests on only 7 test patients and cannot be distinguished from noise. The model over-predicts disease in patients whose chest pain is not characteristically cardiac. For a screening application this is the less costly direction of error, since a false positive leads to a further test rather than a missed diagnosis. It does suggest, though, that the model is not reading chest pain type as strongly diagnostic on its own.</p>
+<h3 id="55-what-this-suggests">5.5 What this suggests</h3>
+<p>The dominant failure mode is not a weakness of the classifier but a property of the dataset. The strongest signal available to any model here is hospital identity, which correlates with the label far more strongly than most clinical variables, and which survives the removal of the column that names it. Improving the score on this data and building a model that generalizes to a new clinical setting are, to a substantial degree, different objectives.</p>
+<h2 id="6-discussion">6. Discussion</h2>
+<h3 id="61-what-best-meant">6.1 What &quot;best&quot; meant</h3>
+<p>I treated F1 as decisive, with recall as a tiebreaker among configurations whose F1 differences fell within noise. My first instinct was F2, on the clinical argument that a missed diagnosis costs more than a false alarm, but comparing against the baselines showed it could not do the job: F2 scored the majority-class classifier at 0.8615 against 0.8743 for a tuned logistic regression. A metric that nearly ranks a constant classifier alongside a real model is not measuring what I wanted. The cause is structural, since a positive-majority dataset lets the all-positive classifier attain perfect recall by construction. F1 puts the same comparison at 0.7133 against 0.8768.</p>
+<p>This survives to the test set: the majority baseline still beats the final model on test F2 (0.862 against 0.789). Had I kept F2, my conclusion would have been that no model beats predicting disease for everyone, which would have been an artifact of the metric.</p>
+<h3 id="62-the-hypothesis-was-not-borne-out">6.2 The hypothesis was not borne out</h3>
+<p>I predicted Random Forest would achieve the highest F1. It finished last of six in cross-validation (0.8241 against the SVM's 0.8362). More importantly, the framing was wrong: I expected a ranking to exist, and no pair of models is separable. The six span 0.0121 F1 in total, and the two ranking procedures disagree with each other, with Random Forest placing second on dev and last in cross-validation.</p>
+<p>I had expected the feature space to reward a model capturing nonlinear interactions. Either those interactions are weak, or 552 examples are too few to identify them. Two observations point the same way: the winning configurations were the regularized ones (logistic regression at C=0.1, the SVM at C=1), and the SGD classifier with log loss reproduced logistic regression's metrics exactly, as expected given it fits the same model by a different optimizer. On this dataset, at this sample size, the choice among these six families matters less than how the data is cleaned.</p>
+<h3 id="63-the-value-of-data">6.3 The value of data</h3>
+<p>Dev F1 rises steadily with training size, from 0.858 at 138 examples to 0.893 at 552. Test F1 does not: it moves between 0.792 and 0.809 with no trend, and the value at 552 (0.796) is no better than at 138 (0.792). On the test set, additional data beyond roughly 276 examples bought nothing. Combined with Section 6.2, most of the achievable performance here is reached early, and the remaining errors are not the kind more examples would fix. The constant gap between the two curves indicates that the dev/test difference is a property of the splits rather than of any particular fit.</p>
+<h3 id="64-dev-cross-validation-and-test">6.4 Dev, cross-validation, and test</h3>
+<p>The three estimates are 0.893 on dev, 0.836 ± 0.028 in cross-validation, and 0.796 on test. The dev figure is optimistic by construction: each configuration was selected as the best of up to 30 candidates on the same 184 examples, so it absorbs whatever noise that split happened to favour. The cross-validation figure averages 30 folds on training data alone, with no configuration selected on those folds, making it the most trustworthy estimate. The test figure sits a little over one standard deviation below it, unremarkable for a single 184-row sample. Had I selected configurations on the test set, I would have reported something near 0.89 and believed it.</p>
+<h3 id="65-limitations">6.5 Limitations</h3>
+<p>The separability test in Section 4.2 is a heuristic, not a statistical test: cross-validation folds share training data, so the per-fold differences are not independent and no p-value should be attached.</p>
+<p>The site ablation is unresolved. Keeping the source hospital column improves test F1 by 0.020, contradicting the dev result. I did not switch on this, because choosing a configuration from a test-set result converts that set into a second development set. Settling it would require the paired cross-validation of Section 4.2 run on training data alone.</p>
+<p>The SVM's selection rests on a tie the data cannot break. It ranked first under both procedures, which was the rule set in advance, but logistic regression would have been equally defensible and is more interpretable. The test result should be read as the performance of one member of a group of indistinguishable models.</p>
+<h3 id="66-what-i-learned-and-what-was-difficult">6.6 What I learned and what was difficult</h3>
+<p>I expected the classifier comparison to be the substance of the work and the cleaning to be preliminary. It was the reverse: the six classifiers are indistinguishable, while the discovery that 172 cholesterol values were sentinel zeros, and that their absence encodes hospital identity, changed how the whole result should be read. Those zeros were the harder of the two challenges to catch, since they are invisible to <code>isna()</code> and appear in the data as ordinary numbers; I found them by inspecting per-site distributions, where Switzerland showed a mean cholesterol of exactly zero.</p>
+<p>The second difficulty was accepting that the comparison had no winner. The natural response to six models within 0.016 F1 is to search harder for the real ordering; the correct response was to test whether one existed. Reporting &quot;no separable difference&quot; felt weaker than naming a winner, but it required treating the absence of a difference as a finding rather than a failure to find one.</p>
+<h2 id="7-generative-ai-use-statement">7. Generative AI Use Statement</h2>
+<p>I used generative AI on this assignment. The table below documents its use by phase.</p>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Used AI?</th>
+<th>How (mode + what I asked)</th>
+<th>How I checked / corrected / overrode it</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Planning &amp; understanding</td>
+<td>Yes</td>
+<td><strong>Information</strong> and <strong>Advice / feedback</strong>. I used Claude (chat interface) to profile the raw dataset before deciding on an approach, asking what the missingness structure looked like and whether any columns were problematic. I asked whether F2 was the right decisive metric for a medical screening task, and later asked it to review the metric choice against the baseline results.</td>
+<td>The profiling output was verified directly: I re-ran the missingness counts and the per-site cholesterol distributions myself and confirmed the 172 sentinel zeros and the per-hospital missingness rates. On the metric question, I overrode the initial F2 recommendation after computing the baseline scores myself and finding that F2 ranked the majority-class classifier within 0.013 of a real model. The switch to F1 was my decision, made on my own numbers.</td>
+</tr>
+<tr>
+<td>Coding and Debugging</td>
+<td>Yes</td>
+<td><strong>Creation</strong>. I used Claude Code in VS Code to write the project's Python modules from specifications I wrote: the cleaning and pipeline layer (<code>data.py</code>), the metric helpers and baselines (<code>evaluate.py</code>), the dev-set comparison (<code>experiments.py</code>), the repeated cross-validation (<code>confirm.py</code>), and the final test evaluation with ablations and error analysis (<code>final.py</code>). I specified the cleaning rules, the hyperparameter grids, the split protocol, and the requirement that all preprocessing sit inside the Pipeline.</td>
+<td>I verified the outputs against hand-checked values: the post-sentinel-fix missing count (172 + 30 = 202, 22.0%), the split sizes (552/184/184), and the class balance in each split. I checked that no file other than <code>final.py</code> touched the test set. Claude Code flagged two issues I then decided on myself: that the categorical imputer was discarding the <code>fbs</code>/<code>exang</code> missingness signal, which I chose to fix for consistency with the numeric columns, and that the vectorized random baseline needed validation, which was then checked against scikit-learn on 200 draws.</td>
+</tr>
+<tr>
+<td>Analysis &amp; interpretation</td>
+<td>Yes</td>
+<td><strong>Advice / feedback</strong>. I discussed the results as they came in: whether a 0.016 F1 spread across six models supported a ranking, how to interpret the gap between the dev, cross-validation, and test estimates, and what the concentration of errors among sentinel-cholesterol patients implied.</td>
+<td>The decision to run repeated cross-validation came from the observation that the dev spread was about three patients wide, which I confirmed by computing the per-prediction sensitivity of F1 on a 184-row set. I rejected the suggestion to reconsider the metric after seeing that the majority baseline beat the final model on test F2, on the grounds that changing a pre-registered metric on test-set evidence would invalidate the estimate. I also declined to adopt the site-retaining configuration despite its better test F1, for the same reason. Both judgments are recorded in Sections 6.1 and 6.5.</td>
+</tr>
+<tr>
+<td>Report writing, formatting, editing</td>
+<td>Yes</td>
+<td><strong>Creation</strong> and <strong>Advice / feedback</strong>. I asked for drafts of several report sections based on my own results and the decisions I had already made, then rewrote them in my language using Gramamrly AI. I also asked for feedback on my hypothesis paragraph, which I had drafted first.</td>
+<td>Every number in the report was checked against the generated CSV files in <code>results/</code>. I corrected the draft hypothesis, which had been written to include reasoning I had not actually used, so that it reflects what I genuinely expected and why. I cut material from the drafted Discussion that overstated conclusions the data did not support. Section structure, cross-references,Draft Reworks and all interpretive claims are my own.</td>
+</tr>
+</tbody>
+</table>
+
+</body>
+</html>
