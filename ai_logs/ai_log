@@ -1,0 +1,58 @@
+# AI Use Log
+
+Session-level record supporting the Generative AI Use Statement in
+`Report.md` Section 7.
+
+## Tools
+
+- **Claude (chat interface)** — planning, data profiling, methodology
+  discussion, report drafting.
+- **Claude Code (VS Code extension)** — all Python module authoring,
+  run from specifications given by me.
+- **Grammarly AI** — language editing of report prose.
+
+## Sessions
+
+**1. Data profiling and planning.** Profiled the raw CSV before any
+modelling: missingness by column and by site, label balance, per-site
+disease prevalence. This surfaced the sentinel-zero cholesterol values
+and the site/missingness correlation. Also covered repo structure and
+the three-day plan.
+
+**2. `data.py`.** Specified the cleaning rules (sentinel conversion,
+`fbs`/`exang` mapping, site column handling) and the leak-free
+`ColumnTransformer` pipeline. Verified split sizes and the post-fix
+missing count by hand.
+
+**3. Metric decision.** Discussed F2 versus F1 against the baseline
+numbers. Decided F1 as decisive with recall as tiebreaker.
+
+**4. `confirm.py`.** Repeated cross-validation to test whether the dev
+ranking was real. Result: no pair separable.
+
+**5. `SGDClassifier` addition.** Sixth model added; dev comparison and
+CV re-run. Conclusion unchanged.
+
+**6. `final.py`.** Test evaluation, training-size ablation, site
+ablation, error analysis. The site ablation result (test F1 0.816 with
+the column kept, against 0.796 dropped) was noted but not acted on.
+
+**9-12. Report drafting.** Hypothesis, Introduction, Approach, Results,
+Error Analysis and Discussion. Drafts were
+produced from results and decisions already fixed, then reviewed and
+rewritten.
+
+## Judgments made against AI suggestions
+
+- Overrode the initial F2 recommendation after computing the baseline
+  scores.
+- Declined to revisit the metric when the majority baseline beat the
+  final model on test F2.
+- Declined to adopt the site-retaining configuration despite its higher
+  test F1.
+- Corrected a drafted claim in Section 5.4 that described the model's
+  over-prediction of disease as contrary to screening priorities, which
+  contradicted the report's own metric argument.
+- Experimented with alternative hyperparameter ranges for SGDClassifier and RandomForestClassifier beyond the suggested grids.
+- Rewrote every drafted report section rather than using the drafts as
+  written.
